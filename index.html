@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Compass — Anna University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✅</span>
+    <span id="toastMsg">Done!</span>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalClose">✕</button>
+      <span class="modal-tag" id="modalType">Academic</span>
+      <h3 id="modalName">Science Block</h3>
+      <p class="modal-code" id="modalCode">SCI-01</p>
+      <div class="modal-grid">
+        <div class="mf"><label>Floors</label><p id="modalFloors">4</p></div>
+        <div class="mf"><label>Hours</label><p id="modalHours">7am–10pm</p></div>
+        <div class="mf"><label>Capacity</label><p id="modalCapacity">800</p></div>
+        <div class="mf"><label>Status</label><p id="modalStatus" class="open">Open</p></div>
+      </div>
+      <button class="btn-primary modal-action" id="modalDirections">Get Directions →</button>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner container">
+      <a class="logo" href="#">
+        <div class="logo-mark">🧭</div>
+        Campus Compass
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#map">Map</a></li>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#routes">Routes</a></li>
+        <li><a href="#bus-tracking">🚌 Bus</a></li>
+        <li><a href="#accessibility">♿ Access</a></li>
+        <li><a href="#emergency-security">🚨 Security</a></li>
+        <li><a href="#alerts">Alerts</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#feedback">Feedback</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner container">
+      <div class="hero-badge"><span class="dot"></span>Anna University · Chennai Campus</div>
+      <h1 class="hero-title">Navigate your campus<br /><em>with confidence</em></h1>
+      <p class="hero-sub">Smart, real-time navigation for every building, lab, and facility across <strong>Anna University, Chennai.</strong></p>
+      <div class="hero-actions">
+        <a href="#map" class="btn-primary">🗺 Explore Map</a>
+        <a href="#routes" class="btn-outline">↗ Popular Routes</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>47</strong><span>Buildings</span></div>
+        <div class="stat"><strong>2,300+</strong><span>Rooms</span></div>
+        <div class="stat"><strong>12</strong><span>Departments</span></div>
+        <div class="stat"><strong>98%</strong><span>Coverage</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="search-section">
+    <div class="container">
+      <div class="search-card">
+        <h3 class="search-title">Find your route</h3>
+        <p class="search-sub">Select your starting point and destination to get directions</p>
+        <div class="search-row">
+          <div class="field">
+            <label for="from"><span class="field-icon">📍</span> From</label>
+            <select id="from">
+              <option value="">Current Location</option>
+              <option value="main-gate">Main Gate</option>
+              <option value="library">Library</option>
+              <option value="student-union">Student Union</option>
+              <option value="science-block">Science Block</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="to"><span class="field-icon">🎯</span> To</label>
+            <select id="to">
+              <option value="">Select destination…</option>
+              <option value="admin">Administration Block</option>
+              <option value="cafeteria">Cafeteria</option>
+              <option value="sports">Sports Complex</option>
+              <option value="engineering">Engineering Block</option>
+              <option value="health">Health Center</option>
+              <option value="parking">Parking Lot A</option>
+            </select>
+          </div>
+          <button class="btn-primary" id="findRoute">🔍 Find Route</button>
+        </div>
+        <div class="route-indicator" id="routeIndicator">
+          <div class="ri-icon">🗺️</div>
+          <div class="ri-text">
+            <strong id="riTitle">Route Found!</strong>
+            <span id="riDesc">Scroll down to see the route on the map</span>
+          </div>
+          <div class="ri-steps" id="riSteps"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="section" id="map">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Campus Map</h2>
+          <p>Click any building for details · Use +/− to zoom</p>
+        </div>
+        <span class="live-pill"><span class="dot"></span> Live · Updated 2 min ago</span>
+      </div>
+      <div class="map-layout">
+        <aside class="map-sidebar" id="mapSidebar"></aside>
+        <div class="map-canvas">
+          <svg viewBox="0 0 800 530" xmlns="http://www.w3.org/2000/svg" id="campusSvg">
+            <rect width="800" height="530" fill="#faf8ff"/>
+            <defs>
+              <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+                <circle cx="14" cy="14" r="1.2" fill="#e8dff8"/>
+              </pattern>
+              <filter id="bshadow">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(124,58,237,0.12)"/>
+              </filter>
+            </defs>
+            <rect width="800" height="530" fill="url(#dots)"/>
+            <g stroke="#f0eafc" stroke-width="16" fill="none" stroke-linecap="round">
+              <line x1="0" y1="265" x2="800" y2="265"/>
+              <line x1="400" y1="0" x2="400" y2="530"/>
+              <line x1="200" y1="0" x2="200" y2="530"/>
+              <line x1="600" y1="0" x2="600" y2="530"/>
+              <line x1="0" y1="132" x2="800" y2="132"/>
+              <line x1="0" y1="398" x2="800" y2="398"/>
+            </g>
+            <text x="100" y="258" fill="#c4b5fd" font-size="8" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">UNIVERSITY AVE</text>
+            <text x="500" y="258" fill="#c4b5fd" font-size="8" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">EAST CAMPUS RD</text>
+            <rect x="418" y="142" width="162" height="108" rx="12" fill="#ede9f8" stroke="#c4b5f4" stroke-width="1.5"/>
+            <text x="499" y="200" fill="#9d87d4" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">CENTRAL QUAD</text>
+            <rect x="218" y="278" width="162" height="100" rx="12" fill="#ede9f8" stroke="#c4b5f4" stroke-width="1.5"/>
+            <text x="299" y="334" fill="#9d87d4" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="600">GARDEN</text>
+            <!-- Buildings -->
+            <g class="svg-building" data-id="0" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="22" y="52" width="152" height="70" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="98" y="82" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Science Block</text>
+              <text x="98" y="96" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">SCI-01</text>
+              <circle cx="98" cy="112" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="1" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="218" y="52" width="162" height="70" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="299" y="82" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Main Library</text>
+              <text x="299" y="96" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">LIB-01</text>
+              <circle cx="299" cy="112" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="2" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="418" y="52" width="162" height="70" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="499" y="82" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Engineering Block</text>
+              <text x="499" y="96" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">ENG-02</text>
+              <circle cx="499" cy="112" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="5" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="622" y="52" width="152" height="70" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="698" y="82" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Admin Block</text>
+              <text x="698" y="96" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">ADM-01</text>
+              <circle cx="698" cy="112" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="3" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="22" y="278" width="152" height="84" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="98" y="313" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Student Union</text>
+              <text x="98" y="327" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">SU-01</text>
+              <circle cx="98" cy="348" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="4" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="418" y="278" width="162" height="108" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="499" y="325" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Sports Complex</text>
+              <text x="499" y="339" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">SPT-01</text>
+              <circle cx="499" cy="358" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="6" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="622" y="278" width="152" height="84" rx="10" fill="#ede9f8" stroke="#8b5cf6" stroke-width="1.5"/>
+              <text x="698" y="313" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Health Center</text>
+              <text x="698" y="327" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">MED-01</text>
+              <circle cx="698" cy="348" r="3.5" fill="#8b5cf6"/>
+            </g>
+            <g class="svg-building" data-id="7" style="cursor:pointer" filter="url(#bshadow)">
+              <rect x="218" y="412" width="162" height="70" rx="10" fill="#ede9f8" stroke="#c4b5f4" stroke-width="1.5"/>
+              <text x="299" y="444" fill="#5b21b6" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">Cafeteria</text>
+              <text x="299" y="458" fill="#a78bfa" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">CAF-01</text>
+            </g>
+            <rect x="622" y="412" width="152" height="70" rx="10" fill="#f8f6ff" stroke="#e0d7f5" stroke-width="1.2" stroke-dasharray="6,3"/>
+            <text x="698" y="444" fill="#c4b5fd" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">Parking Lot A</text>
+            <text x="698" y="458" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">PKG-A</text>
+            <!-- Route path -->
+            <g id="routePath">
+              <polyline id="routePolyline" points="" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="10,6" stroke-linecap="round" opacity="0.85"/>
+              <circle id="routeStart" cx="0" cy="0" r="0" fill="#7c3aed" stroke="white" stroke-width="2"/>
+              <circle id="routeEnd" cx="0" cy="0" r="0" fill="#10b981" stroke="white" stroke-width="2"/>
+            </g>
+            <!-- You Are Here -->
+            <g>
+              <circle cx="200" cy="265" r="18" fill="rgba(124,58,237,0.12)">
+                <animate attributeName="r" values="18;26;18" dur="2.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.12;0;0.12" dur="2.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="200" cy="265" r="8" fill="#7c3aed" stroke="white" stroke-width="2"/>
+              <text x="200" y="250" fill="#7c3aed" font-size="7.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">YOU</text>
+            </g>
+            <!-- Compass -->
+            <g transform="translate(762,480)">
+              <circle r="20" fill="white" stroke="#e8dff8" stroke-width="1.5" filter="url(#bshadow)"/>
+              <text y="-4" fill="#7c3aed" font-size="9.5" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="700">N</text>
+              <line x1="0" y1="-1" x2="0" y2="-12" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+              <text y="14" fill="#c4b5fd" font-size="8" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif">S</text>
+            </g>
+          </svg>
+          <div class="map-controls">
+            <button class="ctrl-btn" id="zoomIn">+</button>
+            <button class="ctrl-btn" id="zoomOut">−</button>
+          </div>
+          <div class="map-legend">
+            <div class="legend-item"><span class="ldot" style="background:#8b5cf6"></span>Academic</div>
+            <div class="legend-item"><span class="ldot" style="background:#a78bfa"></span>Library</div>
+            <div class="legend-item"><span class="ldot" style="background:#c4b5f4"></span>Services</div>
+            <div class="legend-item"><span class="ldot" style="background:#10b981"></span>Route End</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section class="section alt-bg" id="facilities">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Campus Facilities</h2>
+          <p>Everything available to students &amp; staff</p>
+        </div>
+        <span class="section-meta">47 buildings · 2,300+ rooms</span>
+      </div>
+      <div class="facilities-grid" id="facilitiesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ROUTES -->
+  <section class="section" id="routes">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Popular Routes</h2>
+          <p>Most-used paths across campus today</p>
+        </div>
+      </div>
+      <div class="routes-grid" id="routesGrid"></div>
+    </div>
+  </section>
+
+  <!-- BUS TRACKING -->
+  <section class="section" id="bus-tracking">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>🚌 Live Bus Tracking</h2>
+          <p>Real-time campus bus location, crowd levels & arrival times</p>
+        </div>
+        <span class="live-pill"><span class="dot"></span>Live Updates</span>
+      </div>
+      <div class="bus-tracker-wrapper">
+        <div id="busTrackerContainer" class="bus-tracker-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CROWD DETECTOR -->
+  <section class="section alt-bg" id="crowd-detector">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>👥 Campus Crowd Detector</h2>
+          <p>Check real-time occupancy & crowd levels across campus</p>
+        </div>
+        <span class="live-pill"><span class="dot"></span>Live</span>
+      </div>
+      <div id="crowdDetectorContainer" class="crowd-detector-grid"></div>
+    </div>
+  </section>
+
+  <!-- ACCESSIBILITY & WHEELCHAIR ROUTES -->
+  <section class="section" id="accessibility">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>♿ Accessibility Features</h2>
+          <p>Wheelchair-friendly routes, elevator locations & accessibility information</p>
+        </div>
+      </div>
+
+      <!-- Wheelchair Routes -->
+      <div class="accessibility-subsection">
+        <h3>Suggested Wheelchair-Friendly Routes</h3>
+        <p class="subsection-desc">Fully accessible paths across campus with ramps, elevators & level surfaces</p>
+        <div id="wheelchairRoutesContainer" class="wheelchair-routes-grid"></div>
+      </div>
+
+      <!-- Elevators -->
+      <div class="accessibility-subsection">
+        <h3>Elevator Availability</h3>
+        <p class="subsection-desc">Check elevator status and accessibility in each building</p>
+        <div id="elevatorStatusContainer" class="elevator-status-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMERGENCY & SECURITY -->
+  <section class="section alt-bg" id="emergency-security">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>🚨 Emergency & Security</h2>
+          <p>Emergency contacts, evacuation routes & campus safety information</p>
+        </div>
+      </div>
+      <div class="emergency-action-buttons">
+        <button class="btn-primary emergency-btn" id="emergencyInfoBtn">
+          <span>🚨 Emergency Info & Contacts</span>
+        </button>
+        <div class="quick-contacts">
+          <a href="tel:100" class="quick-contact-btn">
+            <span>🚔</span>
+            <span>Security (Ext. 100)</span>
+          </a>
+          <a href="tel:200" class="quick-contact-btn">
+            <span>🏥</span>
+            <span>Medical (Ext. 200)</span>
+          </a>
+          <a href="tel:101" class="quick-contact-btn">
+            <span>👮</span>
+            <span>Police (Ext. 101)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALERTS -->
+  <section class="section alt-bg" id="alerts">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Campus Alerts</h2>
+          <p>Real-time notices &amp; updates</p>
+        </div>
+        <span class="live-pill"><span class="dot"></span>Live</span>
+      </div>
+      <div class="alerts-list" id="alertsList"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Contact Us</h2>
+          <p>Get in touch with the navigation &amp; campus services team</p>
+        </div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 class="ci-head">Anna University</h3>
+          <p class="ci-sub">Sardar Patel Road, Guindy, Chennai — 600025, Tamil Nadu, India</p>
+          <div class="ci-item"><div class="ci-icon">📍</div><div><div class="ci-label">Address</div><div class="ci-value">Sardar Patel Road, Guindy<br/>Chennai – 600 025, Tamil Nadu</div></div></div>
+          <div class="ci-item"><div class="ci-icon">📞</div><div><div class="ci-label">Phone</div><div class="ci-value">+91 44 2235 8345 (Main)<br/>+91 44 2235 7004 (Campus Services)</div></div></div>
+          <div class="ci-item"><div class="ci-icon">✉️</div><div><div class="ci-label">Email</div><div class="ci-value"><a href="mailto:info@annauniv.edu">info@annauniv.edu</a><br/><a href="mailto:campuscompass@annauniv.edu">campuscompass@annauniv.edu</a></div></div></div>
+          <div class="ci-item"><div class="ci-icon">🕘</div><div><div class="ci-label">Support Hours</div><div class="ci-value">Mon – Sat: 8:00am – 6:00pm<br/>Emergency: 24 / 7</div></div></div>
+          <div class="ci-item"><div class="ci-icon">🌐</div><div><div class="ci-label">Website</div><div class="ci-value"><a href="https://www.annauniv.edu" target="_blank">www.annauniv.edu</a></div></div></div>
+        </div>
+        <div class="contact-form-card">
+          <h3 class="cf-title">Send a Message</h3>
+          <p class="cf-sub">Have a quick question? We'll respond within 24 hours.</p>
+          <div class="form-row">
+            <div class="form-group"><label>First Name</label><input type="text" placeholder="Arjun" id="cFirstName"/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Kumar" id="cLastName"/></div>
+          </div>
+          <div class="form-group"><label>Email Address</label><input type="email" placeholder="arjun@annauniv.edu" id="cEmail"/></div>
+          <div class="form-group"><label>Message</label><textarea placeholder="How can we help you?" id="cMessage"></textarea></div>
+          <button class="btn-primary btn-full" id="submitContact">Send Message ✉️</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section class="section alt-bg" id="feedback">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head-text">
+          <h2>Student Feedback</h2>
+          <p>Help us improve Campus Compass — your input shapes the experience</p>
+        </div>
+      </div>
+      <div class="feedback-wrap">
+        <div class="contact-form-card" id="feedbackFormWrap">
+          <h3 class="cf-title">Share Your Feedback</h3>
+          <p class="cf-sub">Questions, suggestions, or issues — we read every submission.</p>
+          <div class="form-row">
+            <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name" id="fbName"/></div>
+            <div class="form-group"><label>Roll Number / Staff ID</label><input type="text" placeholder="e.g. 21BCE1234" id="fbRoll"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@annauniv.edu" id="fbEmail"/></div>
+            <div class="form-group">
+              <label>Department</label>
+              <select id="fbDept">
+                <option value="">Select department…</option>
+                <option>Computer Science &amp; Engineering</option>
+                <option>Electronics &amp; Communication</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil Engineering</option>
+                <option>Information Technology</option>
+                <option>Electrical Engineering</option>
+                <option>Architecture</option>
+                <option>Management Studies</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Feedback Category</label>
+            <select id="fbCategory">
+              <option value="">Select category…</option>
+              <option>Navigation Accuracy</option>
+              <option>Missing Building / Room</option>
+              <option>App / Website Issue</option>
+              <option>Route Suggestion</option>
+              <option>Campus Facility Request</option>
+              <option>General Query</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Your Query / Feedback</label>
+            <textarea placeholder="Describe your feedback or query in detail…" id="fbMessage"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Rate Your Experience</label>
+            <div id="starRating" class="star-row">
+              <span class="star" data-v="1">☆</span>
+              <span class="star" data-v="2">☆</span>
+              <span class="star" data-v="3">☆</span>
+              <span class="star" data-v="4">☆</span>
+              <span class="star" data-v="5">☆</span>
+            </div>
+          </div>
+          <button class="btn-primary btn-full" id="submitFeedback">Submit Feedback 🚀</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="fg-brand">
+          <div class="logo"><div class="logo-mark">🧭</div>Campus Compass</div>
+          <p class="fg-desc">Smart campus navigation for Anna University, Chennai. Navigate every building, lab, and facility with ease.</p>
+          <div class="fg-social">
+            <a href="#" title="Facebook">📘</a>
+            <a href="#" title="Twitter">🐦</a>
+            <a href="#" title="Instagram">📸</a>
+            <a href="#" title="LinkedIn">💼</a>
+          </div>
+        </div>
+        <div class="fg-col"><h4>Navigate</h4><ul><li><a href="#map">Campus Map</a></li><li><a href="#facilities">Facilities</a></li><li><a href="#routes">Routes</a></li><li><a href="#alerts">Alerts</a></li></ul></div>
+        <div class="fg-col"><h4>University</h4><ul><li><a href="#">About AU</a></li><li><a href="#">Departments</a></li><li><a href="#">Admissions</a></li><li><a href="#">Research</a></li></ul></div>
+        <div class="fg-col"><h4>Support</h4><ul><li><a href="#contact">Contact Us</a></li><li><a href="#feedback">Feedback</a></li><li><a href="#">Accessibility</a></li><li><a href="#">Emergency</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Anna University, Chennai. All rights reserved.</p>
+        <p>Campus Compass — Smart Navigation System</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT WIDGET -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <span class="chat-icon">🤖</span>
+        <div class="chat-header-text">
+          <h4>Campus Guide</h4>
+          <span class="status-online">Online</span>
+        </div>
+      </div>
+      <button class="chat-close" id="chatClose">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-footer">
+      <input type="text" id="chatInput" placeholder="Ask about buildings, facilities..." class="chat-input" />
+      <button class="chat-send" id="chatSend">➤</button>
+    </div>
+  </div>
+
+  <button class="chat-toggle" id="chatToggle" title="Open Campus Guide">
+    <span class="toggle-icon">💬</span>
+  </button>
+
+  <script src="data.js"></script>
+  <script src="map.js"></script>
+  <script src="ui.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="bus-tracking.js"></script>
+  <script src="accessibility-emergency.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
